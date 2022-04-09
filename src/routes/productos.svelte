@@ -9,7 +9,7 @@
 </script>
 
 <script>
-	import { get, post, put } from '$lib/api';
+	import { get, post, put, del } from '$lib/api';
 
 	export let datos;
 	let producto = '';
@@ -24,6 +24,12 @@
 	}
 	async function actualizaProducto() {
 		const respuesta = await put('producto', { producto, id_producto });
+		mensaje = respuesta.message;
+		const nuevalista = await get('producto');
+		datos = nuevalista.datos;
+	}
+	async function eliminaProducto() {
+		const respuesta = await del(`producto?id_producto=${id_producto}&producto=${producto}`);
 		mensaje = respuesta.message;
 		const nuevalista = await get('producto');
 		datos = nuevalista.datos;
@@ -53,7 +59,7 @@
 <div>
 	{producto}
 </div>
-
+<hr />
 <label for=""> Nombre produsto </label>
 
 <input
@@ -71,6 +77,24 @@
 	placeholder="Primary input"
 />
 <button class=" button is-success" on:click={actualizaProducto}>Actualizar producto</button>
+<hr />
+<label for=""> Nombre produsto </label>
+
+<input
+	bind:value={producto}
+	class="input is-primary has-background-dark has-text-white my-2"
+	type="text"
+	placeholder="Primary input"
+/>
+<label for=""> ID produsto </label>
+
+<input
+	bind:value={id_producto}
+	class="input is-primary has-background-dark has-text-white my-2"
+	type="number"
+	placeholder="Primary input"
+/>
+<button class=" button is-success" on:click={eliminaProducto}>Elimina producto</button>
 <div>
 	{producto} - {id_producto}
 </div>
